@@ -37,8 +37,13 @@ public class ConvertService
         return new CurrencyConvertResponse(convertedCurrencyAmount, randomId);
     }
 
-    public List<CurrencyConvertDetails> getCurrencyConversionHistory(SortByCreationDate sortByCreationDate, CurrencyCode currencyCode)
+    public List<CurrencyConvertDetails> getCurrencyConversionHistory(SortByCreationDate sortByCreationDate, CurrencyCode currencyCode, int pageNumber, int pageSize)
     {
-        return convertDAO.getCurrencyConversionByFilter(sortByCreationDate, currencyCode);
+        if (pageNumber <= 0  || pageSize <= 0)
+        {
+            throw new IllegalArgumentException("Page number or size must be bigger than 0");
+        }
+        int offset = (pageNumber - 1) * pageSize;
+        return convertDAO.getCurrencyConversionByFilter(sortByCreationDate, currencyCode, pageSize, offset);
     }
 }
