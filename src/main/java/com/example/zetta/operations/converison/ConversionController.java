@@ -20,9 +20,9 @@ public class ConversionController
     }
 
     @GetMapping
-    public CurrencyConversionResponse getCurrencyConversion(@RequestBody CurrencyConversionRequest currencyConversionRequest)
+    public void getCurrencyConversion()
     {
-        return conversionService.getCurrencyConversion(currencyConversionRequest);
+        conversionService.getCurrencyConversion();
     }
 
     @GetMapping("/history")

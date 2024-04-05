@@ -9,5 +9,4 @@ public class ZettaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ZettaApplication.class, args);
 	}
-
 }
