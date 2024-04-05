@@ -1,8 +1,7 @@
-CREATE TABLE customers(
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(64) NOT NULL,
-    last_name VARCHAR(64) NOT NULL,
+CREATE TABLE conversion_history(
+    transaction_id BIGINT NOT NULL,
+    from_currency VARCHAR(4) NOT NULL,
+    to_currency VARCHAR(4) NOT NULL,
+    amount_converted INT NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
-INSERT INTO customers (first_name, last_name) VALUES ('Stefan', 'Petrov');

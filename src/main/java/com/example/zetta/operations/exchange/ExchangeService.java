@@ -18,13 +18,6 @@ public class ExchangeService
 
     public double getExchangeRate(ExchangeRateRequest exchangeRateRequest)
     {
-        System.out.println(exchangeRateRequest.desiredCurrencyCode().name());
-        try
-        {
-            return currencyLayerApiService.getExchangeRate(exchangeRateRequest);
-        } catch (JsonProcessingException e)
-        {
-            throw new RuntimeException(e);
-        }
+        return currencyLayerApiService.getExchangeRate(exchangeRateRequest);
     }
 }
