@@ -1,6 +1,7 @@
 package com.example.zetta.operations.currencylayer.api;
 
 
+import com.example.zetta.operations.convert.models.CurrencyConvertRequest;
 import com.example.zetta.operations.exchange.models.ExchangeRateRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -25,32 +26,36 @@ public class CurrencyLayerApiService
         this.objectMapper = objectMapper;
     }
 
-    public void convertCurrency()
+    public double convertCurrency(CurrencyConvertRequest currencyConvertRequest)
     {
-//            objectMapper;
-//        String baseUrl = "http://api.currencylayer.com/";
-//        CurrencyCode usd = CurrencyCode.USD;
-//        CurrencyCode eur = CurrencyCode.EUR;
-//        int amount = 100;
-//
-//        String uri = baseUrl+"convert?from="+eur+"&to="+usd+"&amount="+amount+"?access_key="+apiKey;
-//        String uri2 = "http://apilayer.net/api/live?access_key=3bb2133ac35ae48c1b5905633ad7b9e0&currencies=EUR";
-//
-//        String convert = builder.build()
-//                .get()
-//                .uri(uri2)
-//                .retrieve()
-//                .bodyToMono(String.class)
-//                .block();
-//        System.out.println("----------------------------------------------");
-//        System.out.println(convert);
-//        System.out.println("----------------------------------------------");
+        String uri = BASE_URL + "convert?access_key=" + API_KEY + "&from="
+                + currencyConvertRequest.fromCurrencyCode() + "&to="
+                + currencyConvertRequest.toCurrencyCode() + "&amount="
+                + currencyConvertRequest.amount();
+
+        String json = builder.build()
+                .get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        try
+        {
+            JsonNode jsonNode = objectMapper.readTree(json);
+
+            return jsonNode.get("result").asDouble();
+        } catch (JsonProcessingException e)
+        {
+            throw new RuntimeException(e);
+        }
+
     }
 
-    public double getExchangeRate(ExchangeRateRequest exchangeRateRequest) throws JsonProcessingException
+    public double getExchangeRate(ExchangeRateRequest exchangeRateRequest)
     {
-        String uri = BASE_URL +"live?access_key=" + API_KEY + "&currencies="
-                + exchangeRateRequest.desiredCurrencyCode()+"&source="
+        String uri = BASE_URL + "live?access_key=" + API_KEY + "&currencies="
+                + exchangeRateRequest.desiredCurrencyCode() + "&source="
                 + exchangeRateRequest.sourceCurrencyCode();
 
         String json = builder.build()
@@ -60,15 +65,16 @@ public class CurrencyLayerApiService
                 .bodyToMono(String.class)
                 .block();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(json);
-        JsonNode quotesNode = jsonNode.get("quotes");
+        try
+        {
+            JsonNode jsonNode = objectMapper.readTree(json);
+            JsonNode quotesNode = jsonNode.get("quotes");
+            String key = exchangeRateRequest.sourceCurrencyCode().name() + exchangeRateRequest.desiredCurrencyCode().name();
 
-        String key = exchangeRateRequest.sourceCurrencyCode().name()+exchangeRateRequest.desiredCurrencyCode().name();
-
-        return quotesNode.get(key).asDouble();
+            return quotesNode.get(key).asDouble();
+        } catch (JsonProcessingException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }
-
-// "convert" - convert one currency to another
-//    https://api.currencylayer.com/convert?from=EUR&to=GBP&amount=100}
