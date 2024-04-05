@@ -2,7 +2,6 @@ package com.example.zetta.operations.convert.repository;
 
 import com.example.zetta.operations.convert.models.CurrencyConvertDetails;
 import com.example.zetta.operations.convert.models.CurrencyConvertRequest;
-import com.example.zetta.operations.convert.models.CurrencyConvertResponse;
 import com.example.zetta.operations.convert.models.SortByCreationDate;
 import com.example.zetta.operations.exchange.models.CurrencyCode;
 import org.springframework.jdbc.core.DataClassRowMapper;
@@ -31,16 +30,18 @@ public class ConvertDAO
                 currencyConvertRequest.toCurrencyCode().name(), currencyConvertRequest.amount());
     }
 
-    public List<CurrencyConvertDetails> getCurrencyConversionByFilter(SortByCreationDate sortByCreationDate, CurrencyCode currencyCode)
+    public List<CurrencyConvertDetails> getCurrencyConversionByFilter(SortByCreationDate sortByCreationDate, CurrencyCode currencyCode, int pageSize, int offset)
     {
         String sql = """
                 SELECT *
                 FROM conversion_history ch
                 WHERE ch.from_currency = COALESCE(?, ch.from_currency) OR ch.to_currency = COALESCE(?, ch.to_currency)
-                ORDER BY ch.created_at""" + " " + (sortByCreationDate == null ? "ASC" : sortByCreationDate.name());
+                ORDER BY ch.created_at""" + " " + (sortByCreationDate == null ? "ASC" : sortByCreationDate.name())
+                + " LIMIT ? OFFSET ?";
 
         return jdbcTemplate.query(sql, DataClassRowMapper.newInstance(CurrencyConvertDetails.class),
                 (currencyCode == null ? null : currencyCode.name()),
-                (currencyCode == null ? null : currencyCode.name()));
+                (currencyCode == null ? null : currencyCode.name()),
+                pageSize, offset);
     }
 }

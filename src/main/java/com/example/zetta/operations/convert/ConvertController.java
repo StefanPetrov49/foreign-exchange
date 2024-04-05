@@ -30,8 +30,10 @@ public class ConvertController
 
     @GetMapping("/history")
     public List<CurrencyConvertDetails> getCurrencyConversionHistory(@RequestParam(required = false) SortByCreationDate sortByCreationDate,
-                                                                     @RequestParam(required = false) CurrencyCode currencyCode)
+                                                                     @RequestParam(required = false) CurrencyCode currencyCode,
+                                                                     @RequestParam int pageNumber,
+                                                                     @RequestParam int pageSize)
     {
-        return convertService.getCurrencyConversionHistory(sortByCreationDate, currencyCode);
+        return convertService.getCurrencyConversionHistory(sortByCreationDate, currencyCode, pageNumber, pageSize);
     }
 }
