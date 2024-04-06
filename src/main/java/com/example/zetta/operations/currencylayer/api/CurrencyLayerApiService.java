@@ -76,7 +76,7 @@ public class CurrencyLayerApiService
             return quotesNode.get(key).asDouble();
         } catch (JsonProcessingException e)
         {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

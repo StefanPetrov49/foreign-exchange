@@ -28,8 +28,8 @@ public class ConvertService
 
     public CurrencyConvertResponse getCurrencyConversion(CurrencyConvertRequest currencyConvertRequest)
     {
-        String randomId = UUID.randomUUID().toString();
         double convertedCurrencyAmount = currencyLayerApiService.convertCurrency(currencyConvertRequest);
+        String randomId = UUID.randomUUID().toString();
 
         convertDAO.saveConversionInformation(currencyConvertRequest, randomId);
 
