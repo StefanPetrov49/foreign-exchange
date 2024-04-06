@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class ConvertService
@@ -27,10 +28,8 @@ public class ConvertService
 
     public CurrencyConvertResponse getCurrencyConversion(CurrencyConvertRequest currencyConvertRequest)
     {
-        Random random = new Random();
-
+        String randomId = UUID.randomUUID().toString();
         double convertedCurrencyAmount = currencyLayerApiService.convertCurrency(currencyConvertRequest);
-        long randomId = Math.abs(random.nextLong());
 
         convertDAO.saveConversionInformation(currencyConvertRequest, randomId);
 
