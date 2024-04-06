@@ -28,6 +28,7 @@ public class CurrencyLayerApiService
 
     public double convertCurrency(CurrencyConvertRequest currencyConvertRequest)
     {
+        //100 BGN USD
         String uri = BASE_URL + "convert?access_key=" + API_KEY + "&from="
                 + currencyConvertRequest.fromCurrencyCode() + "&to="
                 + currencyConvertRequest.toCurrencyCode() + "&amount="
@@ -54,6 +55,7 @@ public class CurrencyLayerApiService
 
     public double getExchangeRate(ExchangeRateRequest exchangeRateRequest)
     {
+        // USD BGN
         String uri = BASE_URL + "live?access_key=" + API_KEY + "&currencies="
                 + exchangeRateRequest.desiredCurrencyCode() + "&source="
                 + exchangeRateRequest.sourceCurrencyCode();
