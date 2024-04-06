@@ -20,7 +20,7 @@ public class ConvertDAO
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void saveConversionInformation(CurrencyConvertRequest currencyConvertRequest, long randomId)
+    public void saveConversionInformation(CurrencyConvertRequest currencyConvertRequest, String randomId)
     {
         String sql = """
                 INSERT INTO conversion_history (transaction_id, from_currency, to_currency, amount_converted)
