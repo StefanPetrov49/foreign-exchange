@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class ConvertDAO
+public class ConvertHistoryDAO
 {
     private JdbcTemplate jdbcTemplate;
 
-    public ConvertDAO(JdbcTemplate jdbcTemplate)
+    public ConvertHistoryDAO(JdbcTemplate jdbcTemplate)
     {
         this.jdbcTemplate = jdbcTemplate;
     }

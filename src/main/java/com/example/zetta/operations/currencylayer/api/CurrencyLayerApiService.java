@@ -6,16 +6,20 @@ import com.example.zetta.operations.exchange.models.ExchangeRateRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.math.BigDecimal;
 
 @Service
 public class CurrencyLayerApiService
 {
+    @Value("${currencylayer.api.key}")
+    private String API_KEY;
 
-    String API_KEY = "6072c279eec173215545554ca0faeac1";
-
-    String BASE_URL = "http://api.currencylayer.com/";
+    @Value("${currencylayer.api.url}")
+    private String BASE_URL;
 
     private final WebClient.Builder builder = WebClient.builder();
 
@@ -26,9 +30,8 @@ public class CurrencyLayerApiService
         this.objectMapper = objectMapper;
     }
 
-    public double convertCurrency(CurrencyConvertRequest currencyConvertRequest)
+    public BigDecimal convertCurrency(CurrencyConvertRequest currencyConvertRequest)
     {
-        //100 BGN USD
         String uri = BASE_URL + "convert?access_key=" + API_KEY + "&from="
                 + currencyConvertRequest.fromCurrencyCode() + "&to="
                 + currencyConvertRequest.toCurrencyCode() + "&amount="
@@ -45,17 +48,16 @@ public class CurrencyLayerApiService
         {
             JsonNode jsonNode = objectMapper.readTree(json);
 
-            return jsonNode.get("result").asDouble();
+            return BigDecimal.valueOf(jsonNode.get("result").asDouble());
         } catch (JsonProcessingException e)
         {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
 
     }
 
-    public double getExchangeRate(ExchangeRateRequest exchangeRateRequest)
+    public BigDecimal getExchangeRate(ExchangeRateRequest exchangeRateRequest)
     {
-        // USD BGN
         String uri = BASE_URL + "live?access_key=" + API_KEY + "&currencies="
                 + exchangeRateRequest.desiredCurrencyCode() + "&source="
                 + exchangeRateRequest.sourceCurrencyCode();
@@ -72,8 +74,7 @@ public class CurrencyLayerApiService
             JsonNode jsonNode = objectMapper.readTree(json);
             JsonNode quotesNode = jsonNode.get("quotes");
             String key = exchangeRateRequest.sourceCurrencyCode().name() + exchangeRateRequest.desiredCurrencyCode().name();
-
-            return quotesNode.get(key).asDouble();
+            return BigDecimal.valueOf(quotesNode.get(key).asDouble());
         } catch (JsonProcessingException e)
         {
             throw new RuntimeException(e.getMessage());

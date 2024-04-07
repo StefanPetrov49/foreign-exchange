@@ -2,7 +2,7 @@ package com.example.zetta.service;
 
 import com.example.zetta.operations.convert.models.CurrencyConvertDetails;
 import com.example.zetta.operations.convert.models.SortByCreationDate;
-import com.example.zetta.operations.convert.repository.ConvertDAO;
+import com.example.zetta.operations.convert.repository.ConvertHistoryDAO;
 import com.example.zetta.operations.exchange.models.CurrencyCode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ public class ConvertServiceTest
    @Mock
    private JdbcTemplate jdbcTemplate;
    @InjectMocks
-   private ConvertDAO convertDAO;
+   private ConvertHistoryDAO convertDAO;
 
     @Test
     void whenInjectInMemoryDataSource_thenReturnCorrectBGNCount() {

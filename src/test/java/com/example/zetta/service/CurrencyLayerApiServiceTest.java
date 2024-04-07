@@ -2,9 +2,9 @@ package com.example.zetta.service;
 
 import com.example.zetta.operations.convert.ConvertService;
 import com.example.zetta.operations.convert.models.CurrencyConvertRequest;
-import com.example.zetta.operations.convert.models.CurrencyConvertResponse;
+import com.example.zetta.operations.convert.models.CurrencyConvertResult;
 import com.example.zetta.operations.convert.models.SortByCreationDate;
-import com.example.zetta.operations.convert.repository.ConvertDAO;
+import com.example.zetta.operations.convert.repository.ConvertHistoryDAO;
 import com.example.zetta.operations.currencylayer.api.CurrencyLayerApiService;
 import com.example.zetta.operations.exchange.ExchangeService;
 import com.example.zetta.operations.exchange.models.CurrencyCode;
@@ -17,6 +17,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +35,7 @@ public class CurrencyLayerApiServiceTest
     private ExchangeService exchangeService;
 
     @Mock
-    private ConvertDAO convertDAO;
+    private ConvertHistoryDAO convertHistoryDAO;
     @InjectMocks
     private ConvertService convertService;
 
@@ -41,12 +43,12 @@ public class CurrencyLayerApiServiceTest
     public void testGetCurrencyConversion()
     {
         //Given
-        double expectedAns = 56.01;
-        CurrencyConvertRequest req = new CurrencyConvertRequest(100, CurrencyCode.USD, CurrencyCode.BGN);
+        BigDecimal expectedAns = BigDecimal.valueOf(56.01);
+        CurrencyConvertRequest req = new CurrencyConvertRequest(BigDecimal.valueOf(100), CurrencyCode.USD, CurrencyCode.BGN);
         Mockito.when(currencyLayerApiService.convertCurrency(req))
                 .thenReturn(expectedAns);
         //When
-        CurrencyConvertResponse result = convertService.getCurrencyConversion(req);
+        CurrencyConvertResult result = convertService.getCurrencyConversion(req);
         //Then
         assertEquals(expectedAns, result.convertedAmount());
         assertNotNull(result.transactionId());
@@ -56,12 +58,12 @@ public class CurrencyLayerApiServiceTest
     public void testGetExchangeRate()
     {
         // Given
-        double expectedAns = 0.92;
+        BigDecimal expectedAns = BigDecimal.valueOf(0.92);
         ExchangeRateRequest req = new ExchangeRateRequest(CurrencyCode.USD, CurrencyCode.BGN);
         Mockito.when(currencyLayerApiService.getExchangeRate(req))
                 .thenReturn(expectedAns);
         //When
-        double result = exchangeService.getExchangeRate(req);
+        BigDecimal result = exchangeService.getExchangeRate(req);
         //Then
         assertEquals(expectedAns, result);
     }

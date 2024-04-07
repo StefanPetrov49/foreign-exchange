@@ -5,6 +5,8 @@ import com.example.zetta.operations.exchange.models.ExchangeRateRequest;
 import com.example.zetta.operations.exchange.models.ExchangeRateResponse;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/exchange")
 public class ExchangeController
@@ -17,7 +19,7 @@ public class ExchangeController
     }
 
     @PostMapping
-    public double getExchangeRate(@RequestBody ExchangeRateRequest exchangeRateRequest)
+    public BigDecimal getExchangeRate(@RequestBody ExchangeRateRequest exchangeRateRequest)
     {
         return exchangeService.getExchangeRate(exchangeRateRequest);
     }

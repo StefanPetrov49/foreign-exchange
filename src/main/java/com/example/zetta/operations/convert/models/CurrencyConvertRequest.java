@@ -2,5 +2,7 @@ package com.example.zetta.operations.convert.models;
 
 import com.example.zetta.operations.exchange.models.CurrencyCode;
 
-public record CurrencyConvertRequest(double amount, CurrencyCode fromCurrencyCode, CurrencyCode toCurrencyCode)
+import java.math.BigDecimal;
+
+public record CurrencyConvertRequest(BigDecimal amount, CurrencyCode fromCurrencyCode, CurrencyCode toCurrencyCode)
 {}

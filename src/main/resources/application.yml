@@ -1,0 +1,22 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    generate-unique-name: false
+    name: foreign_exchange
+  application:
+    name: zetta
+
+
+server:
+  port: 8080
+
+springdoc:
+  api-docs.path: /api-docs
+  swagger-ui.path: /swagger-ui-zetta.html
+
+currencylayer:
+  api:
+    key: 6072c279eec173215545554ca0faeac1
+    url: http://api.currencylayer.com/
